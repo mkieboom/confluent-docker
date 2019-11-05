@@ -1,21 +1,24 @@
 Confluent Cloud 2 Onprem
 
-# Launch local Confluent cluster with 3 brokers using Docker
+### Launch local Confluent cluster with 3 brokers using Docker
+```
 git clone https://github.com/mkieboom/confluent-docker
 cd confluent-docker/3brokers
 ./start.sh
+```
 
-# Wait a minute or two to let the Docker environment launch
-# Open a browser to http://localhost:9021
+Wait a minute or two to let the Docker environment launch
+Open a browser to http://localhost:9021
 
+### Create a topic in Confluent Cloud
+Follow the "CLI and client configuration" in https://confluent.cloud/ to create the "test-topic"
 
-# Follow the "CLI and client configuration" in https://confluent.cloud/ to create the "test-topic"
+### Configure Confluent Replicator on the ONPREM cluster
+NOTE: please make sure to change the following items in below REST API call:
+src.kafka.bootstrap.servers - to reflect your confluent cloud cluster
+src.kafka.sasl.jaas.config - username & password to reflect your API_KEY and API_SECRET
 
-# Configure Confluent Replicator on the ONPREM cluster
-# NOTE: please make sure to change the following items in below REST API call:
-# src.kafka.bootstrap.servers - to reflect your confluent cloud cluster
-# src.kafka.sasl.jaas.config - username & password to reflect your API_KEY and API_SECRET
-
+```
 curl -X POST http://localhost:8083/connectors \
 -H "Content-Type: application/json" \
 -d \
@@ -38,9 +41,12 @@ curl -X POST http://localhost:8083/connectors \
     "tasks.max": "1"
   }
 }'
+```
 
-# Validate the connector got deployed correctly
+Validate the connector got deployed correctly
+```
 curl -X GET http://localhost:8083/connectors 
+```
 
 # Wait a minute or two to allow Replicator to connect with the Confluent Cloud and automatically create the ONPREM topic
 
