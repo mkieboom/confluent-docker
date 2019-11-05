@@ -32,7 +32,7 @@ curl -X POST http://localhost:8083/connectors \
     "topic.rename.format":"${topic}-replica",
     "key.converter": "io.confluent.connect.replicator.util.ByteArrayConverter",
     "value.converter": "io.confluent.connect.replicator.util.ByteArrayConverter",
-    "src.kafka.bootstrap.servers": "my.confluent.cloud:9092",
+    "src.kafka.bootstrap.servers": "MY_CONFLUENT_CLOUD_URL:9092",
     "src.kafka.security.protocol": "SASL_SSL",
     "src.kafka.sasl.mechanism": "PLAIN",
     "src.kafka.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"MY_API_KEY\" password=\"MY_API_SECRET\";",
