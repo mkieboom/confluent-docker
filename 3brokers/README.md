@@ -1,6 +1,6 @@
-Confluent Cloud 2 Onprem
+# Confluent Cloud to Confluent Onprem using Replicator
 
-### Launch local Confluent cluster with 3 brokers using Docker
+#### Launch local Confluent cluster with 3 brokers using Docker
 ```
 git clone https://github.com/mkieboom/confluent-docker
 cd confluent-docker/3brokers
@@ -10,10 +10,10 @@ cd confluent-docker/3brokers
 Wait a minute or two to let the Docker environment launch
 Open a browser to http://localhost:9021
 
-### Create a topic in Confluent Cloud
+#### Create a topic in Confluent Cloud
 Follow the "CLI and client configuration" in https://confluent.cloud/ to create the "test-topic"
 
-### Configure Confluent Replicator on the ONPREM cluster
+#### Configure Confluent Replicator on the ONPREM cluster
 NOTE: please make sure to change the following items in below REST API call:
 src.kafka.bootstrap.servers - to reflect your confluent cloud cluster
 src.kafka.sasl.jaas.config - username & password to reflect your API_KEY and API_SECRET
@@ -48,19 +48,26 @@ Validate the connector got deployed correctly
 curl -X GET http://localhost:8083/connectors 
 ```
 
-# Wait a minute or two to allow Replicator to connect with the Confluent Cloud and automatically create the ONPREM topic
+Wait a minute or two to allow Replicator to connect with the Confluent Cloud and automatically create the ONPREM topic
 
-# List topics on ONPREM cluster
+#### List topics on ONPREM cluster
+```
 docker-compose exec kafka1 bash -c 'kafka-topics --bootstrap-server localhost:9092 --list'
+```
 
-# Read messages from ONPREM topic
+#### Read messages from ONPREM topic
+```
 docker-compose exec kafka1 bash -c 'kafka-console-consumer --bootstrap-server localhost:9092 --topic test-topic-replica --from-beginning'
+```
 
-# Write more messages to the CLOUD topic and notice they will show up in the ONPREM topic
+#### Write more messages to the CLOUD topic and notice they will show up in the ONPREM topic
+```
 ccloud kafka topic produce test-topic
 hello
 world
+```
 
-
-# Cleanup
+#### Cleanup
+```
 curl -X DELETE http://localhost:8083/connectors/replicator
+```
