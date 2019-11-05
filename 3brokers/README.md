@@ -15,7 +15,9 @@ Follow the "CLI and client configuration" in https://confluent.cloud/ to create 
 
 #### Configure Confluent Replicator on the ONPREM cluster
 NOTE: please make sure to change the following items in below REST API call:
+
 src.kafka.bootstrap.servers - to reflect your confluent cloud cluster
+
 src.kafka.sasl.jaas.config - username & password to reflect your API_KEY and API_SECRET
 
 ```
