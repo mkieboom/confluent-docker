@@ -1,23 +1,31 @@
 # Run Replicator on source cluster
 
-# Goal
+### Goal
 Launch Confluent Replicator on the source cluster 
 
-# Clone the github project
+### Clone the github project
+```
 git clone https://github.com/mkieboom/confluent-docker
 cd 2clusters-1broker
+```
 
-# Launch the clusters using docker-compose
+### Launch the clusters using docker-compose
+```
 docker-compose up -d
+```
 
-# Check if all containers are up and running
+### Check if all containers are up and running
+```
 docker-compose ps
+```
 
-# Kafka Connect configuration:
-# As Replicator is running on the source, Kafka Connect is mandatory to point to the destination cluster, eg:
+### Kafka Connect configuration:
+### As Replicator is running on the source, Kafka Connect is mandatory to point to the destination cluster, eg:
+```
 CONNECT_BOOTSTRAP_SERVERS: kafkadest:9092
+```
 
-# Deploying Replicator is done using the following curl command as outlined in the following documentation:
+### Deploying Replicator is done using the following curl command as outlined in the following documentation:
 ```
 curl -X POST \
      -H "Content-Type: application/json" \
@@ -41,24 +49,24 @@ curl -X POST \
 ```
 
 
-# Get the connector status
+### Get the connector status
 ```
 curl localhost:8083/connectors/replicator/status | jq
 ```
 
-# Create a topic on the source cluster
+### Create a topic on the source cluster
 ```
 docker exec -it kafkasource \
   kafka-topics --bootstrap-server kafkasource:9092 --create --topic my-onprem-topic --partitions 6 --replication-factor 1
 ```
 
-# List the created topic
+### List the created topic
 ```
 docker exec -it kafkasource \
   kafka-topics --bootstrap-server kafkasource:9092 --list
 ```
 
-# Launch the console producer and consumer on the source cluster
+### Launch the console producer and consumer on the source cluster
 ```
 docker exec -it kafkasource \
   kafka-console-producer --broker-list kafkasource:9092 --topic my-onprem-topic
@@ -69,32 +77,32 @@ docker exec -it kafkasource \
   kafka-console-consumer --bootstrap-server kafkasource:9092 --topic my-onprem-topic --from-beginning
 ```
 
-# List the topics on the SOURCE cluster
+### List the topics on the SOURCE cluster
 ```
 docker exec -it kafkasource \
   kafka-topics --bootstrap-server kafkasource:9092 --list
 ```
 
-# List the topics on the DESTINATION cluster
+### List the topics on the DESTINATION cluster
 ```
 docker exec -it kafkadest \
   kafka-topics --bootstrap-server kafkadest:9092 --list
 ```
 
-# "my-onprem-topic-replica" topic on DESTINATION cluster
+### "my-onprem-topic-replica" topic on DESTINATION cluster
 ```
 docker exec -it kafkadest \
   kafka-topics --bootstrap-server kafkadest:9092 --describe --topic my-onprem-topic-replica
 ```
 
-# Launch consumer on replica at the DESTINATION cluster
+### Launch consumer on replica at the DESTINATION cluster
 ```
 docker exec -it kafkadest \
   kafka-console-consumer --bootstrap-server kafkadest:9092 --topic my-onprem-topic-replica --from-beginning
 ```
 
 
-# Remove the connector if required
+### Remove the connector if required
 ```
 curl -X DELETE http://localhost:8083/connectors/replicator
 ```
