@@ -28,7 +28,6 @@ services:
       KAFKA_BROKER_ID: 101
       KAFKA_ZOOKEEPER_CONNECT: zookeepersource:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkasource:9092
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkasource:19092,PLAINTEXT_HOST://localhost:9092
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -75,7 +74,6 @@ services:
 
   connect:
     image: confluentinc/cp-enterprise-replicator:5.3.0
-    #image: confluentinc/cp-kafka-connect:5.3.0
     hostname: connect
     container_name: connect
     depends_on:
@@ -117,60 +115,3 @@ services:
 #       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
 #       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
 #       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.3.0.jar
-
-
-  # confluent-client:
-  #   image: mkieboom/confluent-client-docker:latest
-  #   hostname: confluent-client
-  #   container_name: confluent-client
-
-  # control-center:
-  #   image: confluentinc/cp-enterprise-control-center:5.3.0
-  #   container_name: control-center
-  #   depends_on:
-  #     - zookeeperdest
-  #     - kafkadest
-  #     - kafkadest2
-  #     - kafkadest3
-  #     - connect
-  #   ports:
-  #     - "9021:9021"
-  #     - "9022:9022"
-  #   environment:
-  #     CONTROL_CENTER_BOOTSTRAP_SERVERS: kafkadest:9092
-  #     CONTROL_CENTER_ZOOKEEPER_CONNECT: zookeeperdest:2181
-  #     CONTROL_CENTER_REPLICATION_FACTOR: 1
-  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION: 1
-  #     CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION: 1
-  #     CONTROL_CENTER_COMMAND_TOPIC_REPLICATION: 1
-  #     CONTROL_CENTER_METRICS_TOPIC_REPLICATION: 1
-  #     CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
-  #     CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
-  #     CONTROL_CENTER_METRICS_TOPIC_PARTITIONS: 1
-  #     CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS: 1
-  #     CONTROL_CENTER_CONNECT_CLUSTER: "http://connect:8083"
-  #     #CONTROL_CENTER_KSQL_URL: "http://ksql-server:8088"
-  #     #CONTROL_CENTER_KSQL_ADVERTISED_URL: "http://localhost:8088"
-  #     #CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
-
-
-
-# Launch
-# docker-compose up -d
-
-# Stop
-# docker-compose down
-
-# List brokers
-# docker exec -it zookeepersource zookeeper-shell localhost:2181 ls /brokers/ids
-
-# List topics
-# docker exec -it kafkasource kafka-topics --bootstrap-server localhost:9092 --list
-
-# Create a topic
-# docker exec -it kafkasource kafka-topics --bootstrap-server localhost:9092 --create --topic my-topic --replication-factor 3 --partitions 6
-
-# Write 10 messages to the topic and read them
-# docker exec -it kafkasource /bin/bash
-# seq 10 | kafka-console-producer --broker-list localhost:9092 --topic my-topic
-# kafka-console-consumer --bootstrap-server localhost:9092 --topic my-topic --from-beginning
