@@ -6,7 +6,7 @@ services:
  # Cluster one
 
   zookeepersource:
-    image: confluentinc/cp-zookeeper:5.3.0
+    image: confluentinc/cp-zookeeper:5.3.1
     hostname: zookeepersource
     container_name: zookeepersource
     environment:
@@ -17,7 +17,7 @@ services:
       - "2181:2181"
 
   kafkasource:
-    image: confluentinc/cp-enterprise-kafka:5.3.0
+    image: confluentinc/cp-enterprise-kafka:5.3.1
     hostname: kafkasource
     container_name: kafkasource
     depends_on:
@@ -40,7 +40,7 @@ services:
  # Cluster two
 
   zookeeperdest:
-    image: confluentinc/cp-zookeeper:5.3.0
+    image: confluentinc/cp-zookeeper:5.3.1
     hostname: zookeeperdest
     container_name: zookeeperdest
     environment:
@@ -51,7 +51,7 @@ services:
       - "2182:2181"
 
   kafkadest:
-    image: confluentinc/cp-enterprise-kafka:5.3.0
+    image: confluentinc/cp-enterprise-kafka:5.3.1
     hostname: kafkadest
     container_name: kafkadest
     depends_on:
@@ -73,7 +73,7 @@ services:
 
 
   connect:
-    image: confluentinc/cp-enterprise-replicator:5.3.0
+    image: confluentinc/cp-enterprise-replicator:5.3.1
     hostname: connect
     container_name: connect
     depends_on:
@@ -114,4 +114,4 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
 #       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
 #       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
-#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.3.0.jar
+#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.3.1.jar
