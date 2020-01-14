@@ -1,7 +1,37 @@
-# Run Replicator on source cluster
+# Run Replicator on source cluster with connect-* topics on source cluster
 
 ### Goal
-Launch Confluent Replicator on the source cluster 
+Launch Confluent Replicator on the source cluster with the connect-* topics on the Source cluster as well.
+
+In order to create the connect-* topics on the source cluster, configure the following
+
+```
+1. Set the Connect bootstrap.servers to the cluster where you want to store the connect-* topics
+# Either in /etc/kafka/connect-distributed.properties:
+bootstrap.servers=kafkasource:9092
+
+# or in Docker
+CONNECT_BOOTSTRAP_SERVERS: kafkasource:9092
+
+
+2. Set connector.client.config.override.policy to All
+# Either in /etc/kafka/connect-distributed.properties:
+connector.client.config.override.policy=All
+
+# or in Docker
+CONNECT_CONNECTOR_CLIENT_CONFIG_OVERRIDE_POLICY: "All"
+
+3. Set the destination bootstrap.servers where the topic should be replicated to in the connector REST call
+"dest.kafka.bootstrap.servers": "kafkadest:9092",
+"producer.override.bootstrap.servers": "kafkadest:9092",
+
+# Optional for secured clusters: set the JAAS config for both dest.kafka as well as producer.override in the REST call
+dest.kafka.sasl.jaas.
+producer.override.sasl.jaas.*
+
+# Optional for offset translation: set the consumer.override in the REST call
+consumer.override.*
+```
 
 ### Clone the github project
 ```
@@ -35,10 +65,9 @@ curl -X POST \
           "connector.class":"io.confluent.connect.replicator.ReplicatorSourceConnector",
           "key.converter": "io.confluent.connect.replicator.util.ByteArrayConverter",
           "value.converter": "io.confluent.connect.replicator.util.ByteArrayConverter",
-          "src.zookeeper.connect": "zookeepersource:2181",
           "src.kafka.bootstrap.servers": "kafkasource:9092",
-          "dest.zookeeper.connect": "zookeeperdest:2181",
           "dest.kafka.bootstrap.servers": "kafkadest:9092",
+          "producer.override.bootstrap.servers": "kafkadest:9092",
           "dest.kafka.replication.factor": "1",
           "tasks.max": "1",
           "confluent.topic.replication.factor": "1",
@@ -47,7 +76,6 @@ curl -X POST \
           }'  \
           http://localhost:8083/connectors
 ```
-
 
 ### Get the connector status
 ```
@@ -89,7 +117,7 @@ docker exec -it kafkadest \
   kafka-topics --bootstrap-server kafkadest:9092 --list
 ```
 
-### "my-onprem-topic-replica" topic on DESTINATION cluster
+### List "my-onprem-topic-replica" topic on DESTINATION cluster
 ```
 docker exec -it kafkadest \
   kafka-topics --bootstrap-server kafkadest:9092 --describe --topic my-onprem-topic-replica
