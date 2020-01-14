@@ -1,7 +1,7 @@
-# Run Replicator on source cluster with connect-* topics on source cluster
+# Run Replicator on source datacenter with connect-* topics on source
 
 ### Goal
-Launch Confluent Replicator on the source cluster with the connect-* topics on the Source cluster as well.
+Launch Confluent Replicator on the source datacenter with the connect-* topics on the source as well.
 
 In order to create the connect-* topics on the source cluster, configure the following
 
@@ -49,13 +49,7 @@ docker-compose up -d
 docker-compose ps
 ```
 
-### Kafka Connect configuration:
-### As Replicator is running on the source, Kafka Connect is mandatory to point to the destination cluster, eg:
-```
-CONNECT_BOOTSTRAP_SERVERS: kafkadest:9092
-```
-
-### Deploying Replicator is done using the following curl command as outlined in the following documentation:
+### Deploying Replicator is done using the following curl command (note the producer.override):
 ```
 curl -X POST \
      -H "Content-Type: application/json" \
@@ -75,6 +69,11 @@ curl -X POST \
           "topic.rename.format": "${topic}-replica"}
           }'  \
           http://localhost:8083/connectors
+```
+
+### Trace the Connect logs (optional)
+```
+docker logs connect -f
 ```
 
 ### Get the connector status
