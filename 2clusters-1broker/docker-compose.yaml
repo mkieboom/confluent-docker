@@ -6,7 +6,7 @@ services:
  # Cluster one
 
   zookeepersource:
-    image: confluentinc/cp-zookeeper:5.3.1
+    image: confluentinc/cp-zookeeper:5.4.0
     hostname: zookeepersource
     container_name: zookeepersource
     environment:
@@ -17,7 +17,7 @@ services:
       - "2181:2181"
 
   kafkasource:
-    image: confluentinc/cp-enterprise-kafka:5.3.1
+    image: confluentinc/cp-enterprise-kafka:5.4.0
     hostname: kafkasource
     container_name: kafkasource
     depends_on:
@@ -37,10 +37,23 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafkasource:9092"
       CONFLUENT_METRICS_ENABLE: 'false'
 
+  schema-registrysource:
+    image: confluentinc/cp-schema-registry:5.4.0
+    hostname: schema-registrysource
+    container_name: schema-registrysource
+    depends_on:
+      - zookeepersource
+      - kafkasource
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registrysource
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeepersource:2181'
+
  # Cluster two
 
   zookeeperdest:
-    image: confluentinc/cp-zookeeper:5.3.1
+    image: confluentinc/cp-zookeeper:5.4.0
     hostname: zookeeperdest
     container_name: zookeeperdest
     environment:
@@ -51,7 +64,7 @@ services:
       - "2182:2181"
 
   kafkadest:
-    image: confluentinc/cp-enterprise-kafka:5.3.1
+    image: confluentinc/cp-enterprise-kafka:5.4.0
     hostname: kafkadest
     container_name: kafkadest
     depends_on:
@@ -71,15 +84,31 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafkadest:9092"
       CONFLUENT_METRICS_ENABLE: 'false'
 
+  schema-registrydest:
+    image: confluentinc/cp-schema-registry:5.4.0
+    hostname: schema-registrydest
+    container_name: schema-registrydest
+    depends_on:
+      - zookeeperdest
+      - kafkadest
+    ports:
+      - "8082:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registrydest
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeperdest:2181'
+
 
   connect:
-    image: confluentinc/cp-enterprise-replicator:5.3.1
+    image: confluentinc/cp-enterprise-replicator:5.4.0
     hostname: connect
     container_name: connect
     depends_on:
       - zookeepersource
       - kafkasource
+      - schema-registrysource
+      - zookeeperdest
       - kafkadest
+      - schema-registrydest
     ports:
       - "8083:8083"
       - "9892:9892"
@@ -114,4 +143,4 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
 #       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
 #       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
-#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.3.1.jar
+#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.4.0.jar
