@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.3.1
+    image: confluentinc/cp-zookeeper:5.4.0
     hostname: zookeeper
     container_name: zookeeper
     environment:
@@ -12,7 +12,7 @@ services:
       - "2181:2181"
 
   kafka1:
-    image: confluentinc/cp-enterprise-kafka:5.3.1
+    image: confluentinc/cp-enterprise-kafka:5.4.0
     hostname: kafka1
     container_name: kafka1
     depends_on:
@@ -33,7 +33,7 @@ services:
 
 
   kafka2:
-    image: confluentinc/cp-enterprise-kafka:5.3.1
+    image: confluentinc/cp-enterprise-kafka:5.4.0
     hostname: kafka2
     container_name: kafka2
     depends_on:
@@ -53,7 +53,7 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka2:9093"
 
   kafka3:
-    image: confluentinc/cp-enterprise-kafka:5.3.1
+    image: confluentinc/cp-enterprise-kafka:5.4.0
     hostname: kafka3
     container_name: kafka3
     depends_on:
@@ -73,8 +73,8 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafka3:9094"
 
   connect:
-    image: confluentinc/cp-enterprise-replicator:5.3.1
-    #image: confluentinc/cp-kafka-connect:5.3.1
+    image: confluentinc/cp-enterprise-replicator:5.4.0
+    #image: confluentinc/cp-kafka-connect:5.4.0
     hostname: connect
     container_name: connect
     depends_on:
@@ -115,11 +115,11 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
 #       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
 #       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
-#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.3.1.jar
+#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.4.0.jar
 
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:5.3.1
+    image: confluentinc/cp-enterprise-control-center:5.4.0
     container_name: control-center
     depends_on:
       - zookeeper
