@@ -5,7 +5,7 @@ services:
  # Cluster one
 
   zookeeperA:
-    image: confluentinc/cp-zookeeper:5.4.0
+    image: confluentinc/cp-zookeeper:latest
     hostname: zookeeperA
     container_name: zookeeperA
     environment:
@@ -16,7 +16,7 @@ services:
       - "12181:12181"
 
   kafkaA1:
-    image: confluentinc/cp-enterprise-kafka:5.4.0
+    image: confluentinc/cp-enterprise-kafka:latest
     hostname: kafkaA1
     container_name: kafkaA1
     depends_on:
@@ -36,7 +36,7 @@ services:
 
 
   kafkaA2:
-    image: confluentinc/cp-enterprise-kafka:5.4.0
+    image: confluentinc/cp-enterprise-kafka:latest
     hostname: kafkaA2
     container_name: kafkaA2
     depends_on:
@@ -55,7 +55,7 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafkaA2:9093"
 
   kafkaA3:
-    image: confluentinc/cp-enterprise-kafka:5.4.0
+    image: confluentinc/cp-enterprise-kafka:latest
     hostname: kafkaA3
     container_name: kafkaA3
     depends_on:
@@ -74,7 +74,7 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafkaA3:9094"
 
   zookeeperB:
-    image: confluentinc/cp-zookeeper:5.4.0
+    image: confluentinc/cp-zookeeper:latest
     hostname: zookeeperB
     container_name: zookeeperB
     environment:
@@ -85,7 +85,7 @@ services:
       - "22181:22181"
 
   kafkaB1:
-    image: confluentinc/cp-enterprise-kafka:5.4.0
+    image: confluentinc/cp-enterprise-kafka:latest
     hostname: kafkaB1
     container_name: kafkaB1
     depends_on:
@@ -104,7 +104,7 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafkaB1:9095"
 
   kafkaB2:
-    image: confluentinc/cp-enterprise-kafka:5.4.0
+    image: confluentinc/cp-enterprise-kafka:latest
     hostname: kafkaB2
     container_name: kafkaB2
     depends_on:
@@ -123,7 +123,7 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafkaB2:9096"
 
   kafkaB3:
-    image: confluentinc/cp-enterprise-kafka:5.4.0
+    image: confluentinc/cp-enterprise-kafka:latest
     hostname: kafkaB3
     container_name: kafkaB3
     depends_on:
@@ -142,8 +142,8 @@ services:
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: "kafkaB3:9097"
 
   connect:
-    image: confluentinc/cp-enterprise-replicator:5.4.0
-    #image: confluentinc/cp-kafka-connect:5.4.0
+    image: confluentinc/cp-enterprise-replicator:latest
+    #image: confluentinc/cp-kafka-connect:latest
     hostname: connect
     container_name: connect
     depends_on:
@@ -188,7 +188,7 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
 #       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
 #       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
-#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.4.0.jar
+#       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-latest.jar
 
 
   confluent-client:
@@ -197,7 +197,7 @@ services:
     container_name: confluent-client
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:5.4.0
+    image: confluentinc/cp-enterprise-control-center:latest
     container_name: control-center
     depends_on:
       - zookeeperB
