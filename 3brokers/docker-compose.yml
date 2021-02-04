@@ -126,7 +126,9 @@ services:
       - kafka1
       - kafka2
       - kafka3
+      - schema-registry
       - connect
+      - ksqldb-server
     ports:
       - "9021:9021"
       - "9022:9022"
@@ -143,11 +145,49 @@ services:
       CONTROL_CENTER_METRICS_TOPIC_PARTITIONS: 1
       CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS: 1
       CONTROL_CENTER_CONNECT_CLUSTER: "http://connect:8083"
-      #CONTROL_CENTER_KSQL_URL: "http://ksql-server:8088"
-      #CONTROL_CENTER_KSQL_ADVERTISED_URL: "http://localhost:8088"
-      #CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONTROL_CENTER_KSQL_URL: "http://ksqldb-server:8088"
+      CONTROL_CENTER_KSQL_ADVERTISED_URL: "http://ksqldb-server:8088"
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
 
+  ksqldb-server:
+    image: confluentinc/cp-ksqldb-server:6.0.1
+    hostname: ksqldb-server
+    container_name: ksqldb-server
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+      - schema-registry
+    ports:
+      - "8088:8088"
+    environment:
+      KSQL_CONFIG_DIR: "/etc/ksql"
+      KSQL_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9093,kafka3:9094"
+      KSQL_HOST_NAME: ksqldb-server
+      KSQL_LISTENERS: "http://0.0.0.0:8088"
+      KSQL_CACHE_MAX_BYTES_BUFFERING: 0
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      KSQL_KSQL_CONNECT_URL: "http://connect:8083"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
 
+  schema-registry:
+    image: confluentinc/cp-schema-registry:6.0.1
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9093,kafka3:9094"
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
 # Launch
 # docker-compose up -d
