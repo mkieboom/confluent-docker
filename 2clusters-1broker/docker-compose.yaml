@@ -17,7 +17,7 @@ services:
       - "2181:2181"
 
   kafkasource:
-    image: confluentinc/cp-enterprise-kafka:latest
+    image: confluentinc/cp-server:latest
     hostname: kafkasource
     container_name: kafkasource
     depends_on:
@@ -64,7 +64,7 @@ services:
       - "2182:2181"
 
   kafkadest:
-    image: confluentinc/cp-enterprise-kafka:latest
+    image: confluentinc/cp-server:latest
     hostname: kafkadest
     container_name: kafkadest
     depends_on:
