@@ -1,4 +1,5 @@
 FROM confluentinc/cp-kafka-connect-base:latest
 
+# Install required connectors
 RUN   confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:latest
 RUN   confluent-hub install marklogic/kafka-marklogic-connector:1.6.0

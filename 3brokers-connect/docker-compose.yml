@@ -87,6 +87,7 @@ services:
       - kafka1
       - kafka2
       - kafka3
+      - schema-registry
     ports:
       - "8083:8083"
       - "9892:9892"
