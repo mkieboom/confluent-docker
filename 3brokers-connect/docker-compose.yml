@@ -110,12 +110,13 @@ services:
       CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       # CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry-dc1:8081,http://schema-registry-dc2:8082'
       CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components
+      #CONNECT_PLUGIN_PATH: /usr/share/confluent-hub-components/confluentinc-kafka-connect-jdbc/ # only load one connector to speed up deployment (it is overidden in connect tests)
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
-      # Confluent Monitoring Interceptors for Control Center Streams Monitoring
-      #CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
-      #CONNECT_PRODUCER_CONFLUENT_MONITORING_INTERCEPTOR_BOOTSTRAP_SERVERS: kafka1:9092
-      #CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
-      #CONNECT_CONSUMER_CONFLUENT_MONITORING_INTERCEPTOR_BOOTSTRAP_SERVERS: kafka1:9092
+      #Confluent Monitoring Interceptors for Control Center Streams Monitoring
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      CONNECT_PRODUCER_CONFLUENT_MONITORING_INTERCEPTOR_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      CONNECT_CONSUMER_CONFLUENT_MONITORING_INTERCEPTOR_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
       KAFKA_JMX_PORT: 9892
       KAFKA_JMX_HOSTNAME: localhost
 #       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
